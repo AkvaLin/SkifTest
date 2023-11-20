@@ -1,0 +1,20 @@
+PODS:
+  - GoogleMaps (8.3.0):
+    - GoogleMaps/Maps (= 8.3.0)
+  - GoogleMaps/Base (8.3.0)
+  - GoogleMaps/Maps (8.3.0):
+    - GoogleMaps/Base
+
+DEPENDENCIES:
+  - GoogleMaps (= 8.3.0)
+
+SPEC REPOS:
+  trunk:
+    - GoogleMaps
+
+SPEC CHECKSUMS:
+  GoogleMaps: 54762190c9741867d03e4e4218672ab5a0a8096b
+
+PODFILE CHECKSUM: d05710a3ed87f3fd1c48cccbd6cdb1c210b71897
+
+COCOAPODS: 1.12.1
