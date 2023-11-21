@@ -123,7 +123,7 @@ struct ContentView: View {
                             }
                             .font(.system(size: 12))
                             .padding(.top, 8.5)
-                            if viewModel.ditances.count > 0 {
+                            if viewModel.ditances.count > 0, viewModel.speed.count > 0, viewModel.speedCalculated {
                                 Slider(value: $viewModel.slider,
                                        in: ClosedRange(uncheckedBounds: (0, Double(viewModel.ditances.count-1))),
                                        step: 1)
@@ -142,6 +142,9 @@ struct ContentView: View {
                                 .onReceive(viewModel.timer) { _ in
                                     viewModel.play()
                                 }
+                            } else {
+                                ProgressView()
+                                    .padding()
                             }
                             HStack {
                                 Button {
@@ -290,8 +293,10 @@ struct ContentView: View {
                 await viewModel.getData()
             }
         }
-        .onChange(of: viewModel.data, perform: { _ in
-            mapView?.drawPath()
+        .onChange(of: viewModel.speedCalculated, perform: { _ in
+            if viewModel.speed.count > 0, viewModel.speedCalculated {
+                mapView?.drawPath()
+            }
         })
         .onChange(of: viewModel.slider, perform: { _ in
             let data = viewModel.getDataForMarker()

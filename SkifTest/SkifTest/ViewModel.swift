@@ -27,10 +27,13 @@ class ViewModel: ObservableObject {
     @Published var showInfo = false
     @Published var isFocused = false
     
+    @Published var speedCalculated = false
+    
     private var multipliers = [1, 4, 8]
     private var multiplierIndex = 0
     public var timer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
     
+    private let semaphore = DispatchSemaphore(value: 1)
     private var storage = Set<AnyCancellable>()
     
     public func getData() async {
@@ -53,10 +56,9 @@ class ViewModel: ObservableObject {
                 self.data = $0
                 if let firstDate = self.data.first?.date, let secondDate = self.data.last?.date {
                     self.dateRange = "\(self.formatDate(dateString: firstDate)) - \(self.formatDate(dateString: secondDate))"
-                    self.calculateDistance(points: self.data.map({ model in
+                    self.calculateDistanceAndSpeed(points: self.data.map({ model in
                         return CLLocationCoordinate2D(latitude: model.latitude, longitude: model.longitude)
                     }))
-                    self.calculateSpeed()
                 }
             })
             .store(in: &storage)
@@ -81,44 +83,69 @@ class ViewModel: ObservableObject {
         var distances = [Double]()
         
         guard points.count > 1 else { return }
-        for i in 0..<points.count-1 {
-            let distance = getDistanceFromLatLonInKm(longitude1: points[i].longitude,
-                                                     latitude1: points[i].latitude,
-                                                     longitude2: points[i+1].longitude,
-                                                     latitude2: points[i+1].latitude)
-            totalDistance += distance
-            distances.append(distance)
-        }
         
-        self.totalDistance = totalDistance
-        self.ditances = distances
+        DispatchQueue.global().async {
+            self.semaphore.wait()
+            for i in 0..<points.count-1 {
+                let distance = self.getDistanceFromLatLonInKm(longitude1: points[i].longitude,
+                                                         latitude1: points[i].latitude,
+                                                         longitude2: points[i+1].longitude,
+                                                         latitude2: points[i+1].latitude)
+                totalDistance += distance
+                distances.append(distance)
+            }
+            
+            DispatchQueue.main.async {
+                self.totalDistance = totalDistance
+                self.ditances = distances
+            }
+            
+            self.semaphore.signal()
+        }
     }
     
     private func calculateSpeed() {
         
+        speedCalculated = false
         maxSpeed = 0
         speed = []
         
-        guard data.count == ditances.count + 1 else { return }
-        
-        for i in 0..<ditances.count {
-            var hours: Double = 0
+        DispatchQueue.global().async {
+            self.semaphore.wait()
+
+            guard self.data.count == self.ditances.count + 1 else { return }
             
-            let df = DateFormatter()
-            df.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-            guard let firstDate = df.date(from: data[i].date) else { return }
-            guard let secondDate = df.date(from: data[i+1].date) else { return }
-            
-            hours = firstDate.distance(to: secondDate) / 60 / 60
-            
-            let speed = ditances[i] / hours
-            
-            if Int(speed) > self.maxSpeed {
-                self.maxSpeed = Int(speed)
+            for i in 0..<self.ditances.count {
+                var hours: Double = 0
+                
+                let df = DateFormatter()
+                df.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+                guard let firstDate = df.date(from: self.data[i].date) else { return }
+                guard let secondDate = df.date(from: self.data[i+1].date) else { return }
+                
+                hours = firstDate.distance(to: secondDate) / 60 / 60
+                
+                let speed = self.ditances[i] / hours
+                
+                DispatchQueue.main.async {
+                    if Int(speed) > self.maxSpeed {
+                        self.maxSpeed = Int(speed)
+                    }
+                    
+                    self.speed.append(speed)
+                }
             }
+            self.semaphore.signal()
             
-            self.speed.append(speed)
+            DispatchQueue.main.async {
+                self.speedCalculated = true
+            }
         }
+    }
+    
+    private func calculateDistanceAndSpeed(points: [CLLocationCoordinate2D]) {
+        calculateDistance(points: points)
+        calculateSpeed()
     }
     
     private func getDistanceFromLatLonInKm(longitude1: Double, latitude1: Double, longitude2: Double, latitude2: Double) -> Double {
