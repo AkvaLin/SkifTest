@@ -26,15 +26,16 @@ struct ContentView: View {
                     HStack {
                         Spacer()
                         Button {
-                            
+                            mapView?.zoomCamera(multiplier: 1.25)
                         } label: {
                             Image(systemName: "plus")
                                 .resizable()
                                 .scaledToFit()
+                                .padding(10)
+                                .frame(width: 44, height: 44, alignment: .center)
+                                .contentShape(Rectangle())
                         }
                         .buttonStyle(.plain)
-                        .padding(10)
-                        .frame(width: 44, height: 45, alignment: .center)
                         .background(
                             BlurView(style: .systemThickMaterial)
                                 .cornerRadius(10)
@@ -44,19 +45,20 @@ struct ContentView: View {
                             alignment: .center)
                     }
                     .padding(.trailing, 16)
-                    .padding(.bottom, 8)
+                    .padding(.bottom, 16)
                     HStack {
                         Spacer()
                         Button {
-                            
+                            mapView?.zoomCamera(multiplier: 0.75)
                         } label: {
                             Image(systemName: "minus")
                                 .resizable()
                                 .scaledToFit()
+                                .padding(10)
+                                .frame(width: 44, height: 44, alignment: .center)
+                                .contentShape(Rectangle())
                         }
                         .buttonStyle(.plain)
-                        .padding(10)
-                        .frame(width: 44, height: 45, alignment: .center)
                         .background(
                             BlurView(style: .systemThickMaterial)
                                 .cornerRadius(10)
@@ -66,25 +68,33 @@ struct ContentView: View {
                             alignment: .center)
                     }
                     .padding(.trailing, 16)
-                    .padding(.bottom, 119)
+                    .padding(.bottom, 100)
                     HStack {
                         Spacer()
                         Button {
-                            
+                            viewModel.isFocused.toggle()
                         } label: {
                             Image(systemName: "eye")
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
+                                .foregroundColor(viewModel.isFocused ? .white : .primary)
+                                .padding(10)
+                                .frame(width: 44, height: 45, alignment: .center)
+                                .contentShape(Rectangle())
                         }
                         .buttonStyle(.plain)
-                        .padding(10)
-                        .frame(width: 44, height: 45, alignment: .center)
                         .background(
-                            BlurView(style: .systemThickMaterial)
-                                .cornerRadius(10)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .stroke(Color(red: 0.75, green: 0.77, blue: 0.85), lineWidth: 0.5)),
+                            Group {
+                                if viewModel.isFocused {
+                                    Color.accentColor
+                                        .cornerRadius(10)
+                                } else {
+                                    BlurView(style: .systemThickMaterial)
+                                        .cornerRadius(10)
+                                }
+                            }.overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color(red: 0.75, green: 0.77, blue: 0.85), lineWidth: 0.5)),
                             alignment: .center)
                     }
                     .padding(.trailing, 16)
@@ -143,9 +153,10 @@ struct ContentView: View {
                                         .minimumScaleFactor(0.01)
                                         .aspectRatio(1, contentMode: .fit)
                                         .lineLimit(1)
+                                        .padding(12)
+                                        .frame(width: 44, height: 44, alignment: .center)
+                                        .contentShape(Rectangle())
                                 }
-                                .padding(12)
-                                .frame(width: 44, height: 44)
                                 Spacer()
                                 Button {
                                     viewModel.isPlaying.toggle()
@@ -154,9 +165,10 @@ struct ContentView: View {
                                     Image(systemName: viewModel.isPlaying ? "pause.fill" : "play.fill")
                                         .resizable()
                                         .scaledToFit()
+                                        .padding(8)
+                                        .frame(width: 44, height: 44, alignment: .center)
+                                        .contentShape(Rectangle())
                                 }
-                                .padding(8)
-                                .frame(width: 44, height: 44)
                                 .padding(.horizontal, 113)
                                 Spacer()
                                 Button {
@@ -167,9 +179,10 @@ struct ContentView: View {
                                     Image(systemName: viewModel.showInfo ? "info.circle.fill" : "info.circle")
                                         .resizable()
                                         .scaledToFit()
+                                        .padding(12)
+                                        .frame(width: 44, height: 44, alignment: .center)
+                                        .contentShape(Rectangle())
                                 }
-                                .padding(12)
-                                .frame(width: 44, height: 44)
                             }
                             .padding(.vertical, 23)
                         }
@@ -252,7 +265,9 @@ struct ContentView: View {
                         } label: {
                             Text("Закрыть")
                                 .fontWeight(.semibold)
-                                .padding(.vertical, 14)
+                                .padding(14)
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .contentShape(Rectangle())
                         }
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
@@ -278,6 +293,18 @@ struct ContentView: View {
         .onChange(of: viewModel.data, perform: { _ in
             mapView?.drawPath()
         })
+        .onChange(of: viewModel.slider, perform: { _ in
+            let data = viewModel.getDataForMarker()
+            mapView?.moveMarker(latitude: data.latitude, longitude: data.longitude, angle: data.angle)
+            if viewModel.isFocused {
+                mapView?.moveCamera(latitude: data.latitude, longitude: data.longitude)
+            }
+        })
+        .onChange(of: viewModel.isFocused) { _ in
+            if viewModel.isFocused {
+                mapView?.zoomCamera(multiplier: 1.5)
+            }
+        }
     }
 }
 

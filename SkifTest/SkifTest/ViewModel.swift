@@ -25,10 +25,11 @@ class ViewModel: ObservableObject {
     @Published var multiplier = 1
     @Published var isPlaying = false
     @Published var showInfo = false
+    @Published var isFocused = false
     
     private var multipliers = [1, 4, 8]
     private var multiplierIndex = 0
-    var timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
+    var timer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
     
     private var storage = Set<AnyCancellable>()
     
@@ -82,9 +83,9 @@ class ViewModel: ObservableObject {
         guard points.count > 1 else { return }
         for i in 0..<points.count-1 {
             let distance = getDistanceFromLatLonInKm(longitude1: points[i].longitude,
-                                                       latitude1: points[i].latitude,
-                                                       longitude2: points[i+1].longitude,
-                                                       latitude2: points[i+1].latitude)
+                                                     latitude1: points[i].latitude,
+                                                     longitude2: points[i+1].longitude,
+                                                     latitude2: points[i+1].latitude)
             totalDistance += distance
             distances.append(distance)
         }
@@ -143,7 +144,7 @@ class ViewModel: ObservableObject {
             multiplierIndex = 0
         }
         timer.upstream.connect().cancel()
-        timer = Timer.publish(every: TimeInterval(0.1/Double(multiplier)), on: .main, in: .common).autoconnect()
+        timer = Timer.publish(every: TimeInterval(0.5/Double(multiplier)), on: .main, in: .common).autoconnect()
     }
     
     public func play() {
@@ -152,7 +153,27 @@ class ViewModel: ObservableObject {
         }
     }
     
-    func updateView(){
-        self.objectWillChange.send()
+    public func getDataForMarker() -> MarkerDataModel {
+        let latitude1 = data[Int(slider)].latitude
+        let longitude1 = data[Int(slider)].longitude
+        let latitude2 = data[Int(slider)+1].latitude
+        let longitude2 = data[Int(slider)+1].longitude
+        
+        let angle = calculateDegree(latitude1: latitude1, longitude1: longitude1, latitude2: latitude2, longitude2: longitude2)
+        
+        return MarkerDataModel(latitude: latitude1,
+                               longitude: longitude1,
+                               angle: angle)
+    }
+    
+    private func calculateDegree(latitude1: Double, longitude1: Double, latitude2: Double, longitude2: Double) -> Double {
+        let dLon = (longitude2 - longitude1)
+        
+        let y = sin(dLon) * cos(latitude2)
+        let x = cos(latitude1) * sin(latitude2) - sin(latitude1) * cos(latitude2) * cos(dLon)
+        
+        var brng = atan2(y, x)
+        
+        return brng
     }
 }
