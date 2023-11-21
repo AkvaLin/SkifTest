@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		21C48042D7EB492856AD7699 /* Pods_SkifTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D3F1D55E75915B5EF91E436 /* Pods_SkifTest.framework */; };
+		F64571F62B0B5E350027A208 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F64571F52B0B5E350027A208 /* ViewModel.swift */; };
+		F64571F82B0B5E3F0027A208 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = F64571F72B0B5E3F0027A208 /* Model.swift */; };
+		F64571FA2B0B67A30027A208 /* GoogleMapsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F64571F92B0B67A30027A208 /* GoogleMapsView.swift */; };
+		F64571FC2B0B70CB0027A208 /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F64571FB2B0B70CB0027A208 /* BlurView.swift */; };
 		F6A5C2952B0B5CEE00219105 /* SkifTestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6A5C2942B0B5CEE00219105 /* SkifTestApp.swift */; };
 		F6A5C2972B0B5CEE00219105 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6A5C2962B0B5CEE00219105 /* ContentView.swift */; };
 		F6A5C2992B0B5CF000219105 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F6A5C2982B0B5CF000219105 /* Assets.xcassets */; };
@@ -18,6 +22,10 @@
 		3D3F1D55E75915B5EF91E436 /* Pods_SkifTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SkifTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BAD65BE14A861CF7AA456726 /* Pods-SkifTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SkifTest.release.xcconfig"; path = "Target Support Files/Pods-SkifTest/Pods-SkifTest.release.xcconfig"; sourceTree = "<group>"; };
 		E67723D52717FE89CAB98A05 /* Pods-SkifTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SkifTest.debug.xcconfig"; path = "Target Support Files/Pods-SkifTest/Pods-SkifTest.debug.xcconfig"; sourceTree = "<group>"; };
+		F64571F52B0B5E350027A208 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		F64571F72B0B5E3F0027A208 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		F64571F92B0B67A30027A208 /* GoogleMapsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleMapsView.swift; sourceTree = "<group>"; };
+		F64571FB2B0B70CB0027A208 /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
 		F6A5C2912B0B5CEE00219105 /* SkifTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SkifTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F6A5C2942B0B5CEE00219105 /* SkifTestApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkifTestApp.swift; sourceTree = "<group>"; };
 		F6A5C2962B0B5CEE00219105 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -77,6 +85,10 @@
 			children = (
 				F6A5C2942B0B5CEE00219105 /* SkifTestApp.swift */,
 				F6A5C2962B0B5CEE00219105 /* ContentView.swift */,
+				F64571F52B0B5E350027A208 /* ViewModel.swift */,
+				F64571F72B0B5E3F0027A208 /* Model.swift */,
+				F64571F92B0B67A30027A208 /* GoogleMapsView.swift */,
+				F64571FB2B0B70CB0027A208 /* BlurView.swift */,
 				F6A5C2982B0B5CF000219105 /* Assets.xcassets */,
 				F6A5C29A2B0B5CF000219105 /* Preview Content */,
 			);
@@ -206,7 +218,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				F6A5C2972B0B5CEE00219105 /* ContentView.swift in Sources */,
+				F64571F62B0B5E350027A208 /* ViewModel.swift in Sources */,
+				F64571FA2B0B67A30027A208 /* GoogleMapsView.swift in Sources */,
 				F6A5C2952B0B5CEE00219105 /* SkifTestApp.swift in Sources */,
+				F64571F82B0B5E3F0027A208 /* Model.swift in Sources */,
+				F64571FC2B0B70CB0027A208 /* BlurView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -250,7 +266,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -313,7 +329,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -341,7 +357,9 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SkifTest/Preview Content\"";
+				DEVELOPMENT_TEAM = 5374B32457;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -371,7 +389,9 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SkifTest/Preview Content\"";
+				DEVELOPMENT_TEAM = 5374B32457;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
