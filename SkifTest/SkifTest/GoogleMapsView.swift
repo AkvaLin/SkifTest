@@ -12,16 +12,18 @@ struct GoogleMapsView: UIViewRepresentable {
     
     @Binding var points: [Model]
     @Binding var speed: [Double]
+    @Environment(\.colorScheme) var colorScheme
     private let zoom: Float = 15.0
     
     let mapView = GMSMapView()
     
     func makeUIView(context: Self.Context) -> GMSMapView {
-        mapView
+        applyColorSchemeToMap()
+        return mapView
     }
     
     func updateUIView(_ uiView: GMSMapView, context: Context) {
-        
+        applyColorSchemeToMap()
     }
     
     func drawPath() {
@@ -100,6 +102,18 @@ struct GoogleMapsView: UIViewRepresentable {
             polyline.strokeWidth = 3.0
             polyline.strokeColor = .red
             polyline.map = mapView
+        }
+    }
+    
+    func applyColorSchemeToMap() {
+        do {
+            if let styleURL = Bundle.main.url(forResource: (colorScheme == .dark) ? "DarkColorScheme" : "LightColorScheme", withExtension: "json") {
+                mapView.mapStyle = try GMSMapStyle(contentsOfFileURL: styleURL)
+            } else {
+                NSLog("Unable to find style.json")
+            }
+        } catch {
+            NSLog("One or more of the map styles failed to load. \(error)")
         }
     }
 }

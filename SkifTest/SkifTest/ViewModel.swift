@@ -22,6 +22,13 @@ class ViewModel: ObservableObject {
     @Published var maxSpeed: Int = 0
     @Published var speed = [Double]()
     
+    @Published var multiplier = 1
+    @Published var isPlaying = false
+    @Published var showInfo = false
+    
+    private var multipliers = [1, 4, 8]
+    private var multiplierIndex = 0
+    var timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
     
     private var storage = Set<AnyCancellable>()
     
@@ -42,7 +49,7 @@ class ViewModel: ObservableObject {
             .decode(type: [Model].self, decoder: JSONDecoder())
             .sink(receiveCompletion: { print ("Received completion: \($0).") },
                   receiveValue: {
-                self.data = $0
+                self.data = Array($0[0...3000])
                 if let firstDate = self.data.first?.date, let secondDate = self.data.last?.date {
                     self.dateRange = "\(self.formatDate(dateString: firstDate)) - \(self.formatDate(dateString: secondDate))"
                     self.calculateDistance(points: self.data.map({ model in
@@ -125,5 +132,27 @@ class ViewModel: ObservableObject {
     
     private func deg2rad(deg: Double) -> Double {
         return deg * ( Double.pi / 180 )
+    }
+    
+    public func changeMultiplier() {
+        if multiplierIndex + 1 < multipliers.count {
+            multiplierIndex += 1
+            multiplier = multipliers[multiplierIndex]
+        } else {
+            multiplier = multipliers[0]
+            multiplierIndex = 0
+        }
+        timer.upstream.connect().cancel()
+        timer = Timer.publish(every: TimeInterval(0.1/Double(multiplier)), on: .main, in: .common).autoconnect()
+    }
+    
+    public func play() {
+        if isPlaying && Int(slider) < ditances.count-1 {
+            slider += 1
+        }
+    }
+    
+    func updateView(){
+        self.objectWillChange.send()
     }
 }

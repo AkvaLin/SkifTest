@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		21C48042D7EB492856AD7699 /* Pods_SkifTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D3F1D55E75915B5EF91E436 /* Pods_SkifTest.framework */; };
+		F62C88E32B0CCE530009535F /* DarkColorScheme.json in Resources */ = {isa = PBXBuildFile; fileRef = F62C88E22B0CCD8A0009535F /* DarkColorScheme.json */; };
+		F62C88E52B0CCE880009535F /* LightColorScheme.json in Resources */ = {isa = PBXBuildFile; fileRef = F62C88E42B0CCE720009535F /* LightColorScheme.json */; };
 		F64571F62B0B5E350027A208 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F64571F52B0B5E350027A208 /* ViewModel.swift */; };
 		F64571F82B0B5E3F0027A208 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = F64571F72B0B5E3F0027A208 /* Model.swift */; };
 		F64571FA2B0B67A30027A208 /* GoogleMapsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F64571F92B0B67A30027A208 /* GoogleMapsView.swift */; };
@@ -22,6 +24,8 @@
 		3D3F1D55E75915B5EF91E436 /* Pods_SkifTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SkifTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BAD65BE14A861CF7AA456726 /* Pods-SkifTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SkifTest.release.xcconfig"; path = "Target Support Files/Pods-SkifTest/Pods-SkifTest.release.xcconfig"; sourceTree = "<group>"; };
 		E67723D52717FE89CAB98A05 /* Pods-SkifTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SkifTest.debug.xcconfig"; path = "Target Support Files/Pods-SkifTest/Pods-SkifTest.debug.xcconfig"; sourceTree = "<group>"; };
+		F62C88E22B0CCD8A0009535F /* DarkColorScheme.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = DarkColorScheme.json; sourceTree = "<group>"; };
+		F62C88E42B0CCE720009535F /* LightColorScheme.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = LightColorScheme.json; sourceTree = "<group>"; };
 		F64571F52B0B5E350027A208 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		F64571F72B0B5E3F0027A208 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		F64571F92B0B67A30027A208 /* GoogleMapsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleMapsView.swift; sourceTree = "<group>"; };
@@ -89,6 +93,8 @@
 				F64571F72B0B5E3F0027A208 /* Model.swift */,
 				F64571F92B0B67A30027A208 /* GoogleMapsView.swift */,
 				F64571FB2B0B70CB0027A208 /* BlurView.swift */,
+				F62C88E22B0CCD8A0009535F /* DarkColorScheme.json */,
+				F62C88E42B0CCE720009535F /* LightColorScheme.json */,
 				F6A5C2982B0B5CF000219105 /* Assets.xcassets */,
 				F6A5C29A2B0B5CF000219105 /* Preview Content */,
 			);
@@ -164,7 +170,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				F6A5C29C2B0B5CF000219105 /* Preview Assets.xcassets in Resources */,
+				F62C88E52B0CCE880009535F /* LightColorScheme.json in Resources */,
 				F6A5C2992B0B5CF000219105 /* Assets.xcassets in Resources */,
+				F62C88E32B0CCE530009535F /* DarkColorScheme.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
