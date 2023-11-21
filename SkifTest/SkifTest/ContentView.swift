@@ -307,7 +307,7 @@ struct ContentView: View {
         })
         .onChange(of: viewModel.isFocused) { _ in
             if viewModel.isFocused {
-                mapView?.zoomCamera(multiplier: 1.5)
+                mapView?.moveCameraToMarker()
             }
         }
     }

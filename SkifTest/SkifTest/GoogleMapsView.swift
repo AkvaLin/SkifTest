@@ -161,4 +161,10 @@ struct GoogleMapsView: UIViewRepresentable {
     public func zoomCamera(multiplier: Float) {
         mapView.animate(toZoom: mapView.camera.zoom * multiplier)
     }
+    
+    public func moveCameraToMarker() {
+        mapView.animate(to: GMSCameraPosition(latitude: marker.position.latitude,
+                                              longitude: marker.position.longitude,
+                                              zoom: mapView.camera.zoom * 1.5))
+    }
 }
