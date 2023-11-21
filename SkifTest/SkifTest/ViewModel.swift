@@ -29,7 +29,7 @@ class ViewModel: ObservableObject {
     
     private var multipliers = [1, 4, 8]
     private var multiplierIndex = 0
-    var timer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
+    public var timer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
     
     private var storage = Set<AnyCancellable>()
     
@@ -50,7 +50,7 @@ class ViewModel: ObservableObject {
             .decode(type: [Model].self, decoder: JSONDecoder())
             .sink(receiveCompletion: { print ("Received completion: \($0).") },
                   receiveValue: {
-                self.data = Array($0[0...3000])
+                self.data = $0
                 if let firstDate = self.data.first?.date, let secondDate = self.data.last?.date {
                     self.dateRange = "\(self.formatDate(dateString: firstDate)) - \(self.formatDate(dateString: secondDate))"
                     self.calculateDistance(points: self.data.map({ model in
@@ -94,7 +94,7 @@ class ViewModel: ObservableObject {
         self.ditances = distances
     }
     
-    func calculateSpeed() {
+    private func calculateSpeed() {
         
         maxSpeed = 0
         speed = []
@@ -123,11 +123,15 @@ class ViewModel: ObservableObject {
     
     private func getDistanceFromLatLonInKm(longitude1: Double, latitude1: Double, longitude2: Double, latitude2: Double) -> Double {
         let radius: Double = 6371
+        
         let dLat = deg2rad(deg: latitude2 - latitude1)
         let dLon = deg2rad(deg: longitude2 - longitude1)
+        
         let a = sin(dLat/2) * sin(dLat/2) + cos(deg2rad(deg: latitude1)) * cos(deg2rad(deg: latitude2)) * sin(dLon/2) * sin(dLon/2)
         let c = 2 * atan2(sqrt(a), sqrt(1-a))
+        
         let distance = radius * c
+        
         return distance
     }
     
@@ -159,7 +163,10 @@ class ViewModel: ObservableObject {
         let latitude2 = data[Int(slider)+1].latitude
         let longitude2 = data[Int(slider)+1].longitude
         
-        let angle = calculateDegree(latitude1: latitude1, longitude1: longitude1, latitude2: latitude2, longitude2: longitude2)
+        let angle = calculateDegree(latitude1: latitude1, 
+                                    longitude1: longitude1,
+                                    latitude2: latitude2,
+                                    longitude2: longitude2)
         
         return MarkerDataModel(latitude: latitude1,
                                longitude: longitude1,
@@ -172,7 +179,7 @@ class ViewModel: ObservableObject {
         let y = sin(dLon) * cos(latitude2)
         let x = cos(latitude1) * sin(latitude2) - sin(latitude1) * cos(latitude2) * cos(dLon)
         
-        var brng = atan2(y, x)
+        let brng = atan2(y, x)
         
         return brng
     }

@@ -27,7 +27,7 @@ struct GoogleMapsView: UIViewRepresentable {
         applyColorSchemeToMap()
     }
     
-    func drawPath() {
+    public func drawPath() {
         guard points.count > 0 else { return }
         mapView.animate(to: GMSCameraPosition(latitude: points[0].latitude, longitude: points[0].longitude, zoom: 15))
         var bluePath = [GMSMutablePath]()
@@ -41,7 +41,7 @@ struct GoogleMapsView: UIViewRepresentable {
         speed.enumerated().forEach { (i, value) in
             if value <= 70 {
                 if isBlue {
-                    bluePath.last?.add(CLLocationCoordinate2D(latitude: points[i].latitude, 
+                    bluePath.last?.add(CLLocationCoordinate2D(latitude: points[i].latitude,
                                                               longitude: points[i].longitude))
                     bluePath.last?.add(CLLocationCoordinate2D(latitude: points[i+1].latitude,
                                                               longitude: points[i+1].longitude))
@@ -51,7 +51,7 @@ struct GoogleMapsView: UIViewRepresentable {
                     isRed = false
                     
                     let path = GMSMutablePath()
-                    path.add(CLLocationCoordinate2D(latitude: points[i].latitude, 
+                    path.add(CLLocationCoordinate2D(latitude: points[i].latitude,
                                                     longitude: points[i].longitude))
                     path.add(CLLocationCoordinate2D(latitude: points[i+1].latitude,
                                                     longitude: points[i+1].longitude))
@@ -61,7 +61,7 @@ struct GoogleMapsView: UIViewRepresentable {
                 if isYellow {
                     yellowPath.last?.add(CLLocationCoordinate2D(latitude: points[i].latitude,
                                                                 longitude: points[i].longitude))
-                    yellowPath.last?.add(CLLocationCoordinate2D(latitude: points[i+1].latitude, 
+                    yellowPath.last?.add(CLLocationCoordinate2D(latitude: points[i+1].latitude,
                                                                 longitude: points[i+1].longitude))
                 } else {
                     isBlue = false
@@ -71,15 +71,15 @@ struct GoogleMapsView: UIViewRepresentable {
                     let path = GMSMutablePath()
                     path.add(CLLocationCoordinate2D(latitude: points[i].latitude,
                                                     longitude: points[i].longitude))
-                    path.add(CLLocationCoordinate2D(latitude: points[i+1].latitude, 
+                    path.add(CLLocationCoordinate2D(latitude: points[i+1].latitude,
                                                     longitude: points[i+1].longitude))
                     yellowPath.append(path)
                 }
             } else {
                 if isRed {
-                    redPath.last?.add(CLLocationCoordinate2D(latitude: points[i].latitude, 
+                    redPath.last?.add(CLLocationCoordinate2D(latitude: points[i].latitude,
                                                              longitude: points[i].longitude))
-                    redPath.last?.add(CLLocationCoordinate2D(latitude: points[i+1].latitude, 
+                    redPath.last?.add(CLLocationCoordinate2D(latitude: points[i+1].latitude,
                                                              longitude: points[i+1].longitude))
                 } else {
                     isBlue = false
@@ -87,9 +87,9 @@ struct GoogleMapsView: UIViewRepresentable {
                     isRed = true
                     
                     let path = GMSMutablePath()
-                    path.add(CLLocationCoordinate2D(latitude: points[i].latitude, 
+                    path.add(CLLocationCoordinate2D(latitude: points[i].latitude,
                                                     longitude: points[i].longitude))
-                    path.add(CLLocationCoordinate2D(latitude: points[i+1].latitude, 
+                    path.add(CLLocationCoordinate2D(latitude: points[i+1].latitude,
                                                     longitude: points[i+1].longitude))
                     redPath.append(path)
                 }
@@ -120,7 +120,7 @@ struct GoogleMapsView: UIViewRepresentable {
         createMarker()
     }
     
-    func applyColorSchemeToMap() {
+    private func applyColorSchemeToMap() {
         do {
             if let styleURL = Bundle.main.url(forResource: (colorScheme == .dark) ? "DarkColorScheme" : "LightColorScheme", withExtension: "json") {
                 mapView.mapStyle = try GMSMapStyle(contentsOfFileURL: styleURL)
@@ -132,31 +132,33 @@ struct GoogleMapsView: UIViewRepresentable {
         }
     }
     
-    func createMarker() {
+    private func createMarker() {
         guard points.count > 0 else { return }
         
         marker.position = CLLocationCoordinate2D(latitude: points[0].latitude, longitude: points[0].longitude)
+        
         guard let image = UIImage(named: "Marker") else { return }
         let iconView = UIImageView(image: image)
         iconView.frame = CGRect(x: 0, y: 0, width: 48, height: 54)
+        
         marker.iconView = iconView
         marker.groundAnchor = CGPoint(x: 0.5, y: 0.5)
         marker.map = mapView
     }
     
-    func moveMarker(latitude: Double, longitude: Double, angle: Double) {
+    public func moveMarker(latitude: Double, longitude: Double, angle: Double) {
         marker.iconView?.transform = CGAffineTransform(rotationAngle: CGFloat(angle))
-        marker.position = CLLocationCoordinate2D(latitude: latitude, 
+        marker.position = CLLocationCoordinate2D(latitude: latitude,
                                                  longitude: longitude)
     }
     
-    func moveCamera(latitude: Double, longitude: Double) {
+    public func moveCamera(latitude: Double, longitude: Double) {
         mapView.animate(to: GMSCameraPosition(latitude: latitude,
                                               longitude: longitude,
                                               zoom: mapView.camera.zoom))
     }
     
-    func zoomCamera(multiplier: Float) {
+    public func zoomCamera(multiplier: Float) {
         mapView.animate(toZoom: mapView.camera.zoom * multiplier)
     }
 }
